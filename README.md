@@ -1,5 +1,5 @@
 Run
 
 ```
-gcc main.c -o out && ./out
+gcc main.c rb.c -o ./bin/out && ./bin/out
 ```
