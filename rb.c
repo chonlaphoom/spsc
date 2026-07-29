@@ -25,21 +25,19 @@ extern Buffer *initBuffer(size_t size) {
   buff->queue = queue;
   buff->head = 0;
   buff->tail = 0;
-  buff->size = 0;
   buff->capacity = size;
+  buff->ready = true;
   return buff;
 }
 
-extern int enqueue(Buffer *buff, size_t val) {
+extern size_t enqueue(Buffer *buff, size_t val) {
   if (buff == NULL || buff->queue == NULL || isFullBuffer(buff)) {
     return 1;
   }
-
-  buff->queue[buff->tail] = val;
+  atomic_size_t atail = atomic_load(&buff->tail);
+  buff->queue[atail] = val;
   size_t cap = buff->capacity;
-  buff->tail = (buff->tail + 1) % cap;
-  buff->size++;
-
+  atomic_store(&buff->tail, (atail + 1) % cap);
   return 0;
 }
 
@@ -47,19 +45,36 @@ extern size_t dequeue(Buffer *buff) {
   if (buff == NULL || buff->queue == NULL || isEmptyBuffer(buff)) {
     return 0;
   }
-
-  size_t val = buff->queue[buff->head];
+  atomic_size_t ahead = atomic_load(&buff->head);
+  size_t val = buff->queue[ahead];
   size_t cap = buff->capacity;
-  buff->head = (buff->head + 1) % cap;
-  buff->size--;
-
+  atomic_store(&buff->head, (ahead + 1) % cap);
   return val;
 }
 
-extern int isEmptyBuffer(const Buffer *buffer) {
-  return (buffer == NULL) ? 1 : (buffer->size == 0);
+extern bool isEmptyBuffer(const Buffer *buffer) {
+  atomic_size_t ahead = atomic_load(&buffer->head);
+  atomic_size_t atail = atomic_load(&buffer->tail);
+  return (buffer == NULL) ? 1 : (ahead == atail);
 }
 
-extern int isFullBuffer(Buffer *buffer) {
-  return (buffer == NULL) ? 0 : (buffer->size == buffer->capacity);
+extern bool isFullBuffer(Buffer *buffer) {
+  atomic_size_t ahead = atomic_load(&buffer->head);
+  atomic_size_t atail = atomic_load(&buffer->tail);
+  return (buffer == NULL) ? 0 : (ahead == (atail + 1) % buffer->capacity);
+}
+
+static void release(Buffer *buffer) {
+  if (buffer != NULL) {
+    return;
+  }
+
+  buffer->ready = true;
+}
+
+static Buffer *acquire(Buffer *buffer) {
+  if (buffer == NULL || buffer->ready == false) {
+    return NULL;
+  }
+  return buffer;
 }
