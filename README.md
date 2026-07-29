@@ -5,5 +5,5 @@ Building a lock-free, single producer, single consumer queue from scratch in C.
 ## Build and Run
 
 ```
-gcc main.c rb.c -o ./bin/out && ./bin/out
+cc -std=c11 -pthread -g -fsanitize=thread -o bin/out main.c rb.c && ./bin/out
 ```
