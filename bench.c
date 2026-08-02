@@ -1,10 +1,4 @@
-/*
- * Measure operations per second of the ring buffer implementation.
- *
- * Build for benchmarking:
- *   cc -std=c11 -O2 -pthread bench.c rb.c -o bin/bench # no padding
- *   cc -std=c11 -O2 -pthread -DPADDED bench.c rb.c -o bin/bench # with padding
- */
+/* Measure operations per second of the ring buffer implementation.*/
 #include "rb.h"
 #include <pthread.h>
 #include <stddef.h>
