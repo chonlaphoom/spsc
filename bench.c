@@ -16,7 +16,7 @@ static void *producer(void *arg);
 static void *consumer(void *arg);
 static double runBenchmark(size_t count);
 
-#define NUM_ITEMS 10000000
+#define NUM_ITEMS 100000000
 #define NUM_ROUNDS 5
 
 int main(void) {
