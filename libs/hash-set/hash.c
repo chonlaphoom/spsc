@@ -38,9 +38,9 @@ void hashSetFree(MyHashSet *obj) {
 
 /**
  * example usage:
- * MyHashSet* obj = myHashSetCreate();
- * myHashSetAdd(obj, key);
- * myHashSetRemove(obj, key);
- * bool param_3 = myHashSetContains(obj, key);
- * myHashSetFree(obj);
+ * MyHashSet* obj = hashSetCreate();
+ * hashSetAdd(obj, key);
+ * hashSetRemove(obj, key);
+ * bool param_3 = hashSetContains(obj, key);
+ * hashSetFree(obj);
  */
