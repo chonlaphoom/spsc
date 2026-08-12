@@ -11,10 +11,8 @@ typedef struct HashMap {
   struct Node *bucket[CAP];
 } MyHashMap;
 
-extern MyHashMap *hashMapCreate();
+extern MyHashMap *hashMapCreate(void);
 extern void hashMapPut(MyHashMap *obj, int key, int value);
 extern int hashMapGet(MyHashMap *obj, int key);
 extern void hashMapRemove(MyHashMap *obj, int key);
 extern void hashMapFree(MyHashMap *obj);
-
-static int hash(int key);

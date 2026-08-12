@@ -2,52 +2,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int hash(int key) { return key % CAP; }
+static int hash(int key) { return key % CAP; }
 
-MyHashMap *hashMapCreate() {
-  MyHashMap *map = (MyHashMap *)calloc(1, sizeof(MyHashMap));
-  if (map == NULL) {
-    return NULL;
-  }
-  for (int i = 0; i < CAP; i++) {
-    map->bucket[i] = NULL;
-  }
-  return map;
+MyHashMap *hashMapCreate(void) {
+  return (MyHashMap *)calloc(1, sizeof(MyHashMap));
 }
 
 void hashMapPut(MyHashMap *obj, int key, int value) {
-  if (obj == NULL || key < 0 || key >= CAP)
+  if (obj == NULL || key < 0)
     return;
-  struct Node *current = obj->bucket[hash(key)];
-  if (current == NULL) {
-    // first node at hash
-    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
-    newNode->key = key;
-    newNode->value = value;
-    newNode->next = NULL;
-    obj->bucket[hash(key)] = newNode;
-    return;
-  }
+  int idx = hash(key);
+  struct Node *current = obj->bucket[idx];
   while (current != NULL) {
     if (current->key == key) {
-      // update value
       current->value = value;
-      return;
-    }
-    if (current->next == NULL) {
-      struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
-      newNode->key = key;
-      newNode->value = value;
-      newNode->next = NULL;
-      current->next = newNode;
       return;
     }
     current = current->next;
   }
+  struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+  if (newNode == NULL)
+    return;
+  newNode->key = key;
+  newNode->value = value;
+  newNode->next = obj->bucket[idx];
+  obj->bucket[idx] = newNode;
 }
 
 int hashMapGet(MyHashMap *obj, int key) {
-  if (obj == NULL || key < 0 || key >= CAP)
+  if (obj == NULL || key < 0)
     return -1;
   struct Node *current = obj->bucket[hash(key)];
   while (current != NULL) {
@@ -60,18 +43,17 @@ int hashMapGet(MyHashMap *obj, int key) {
 }
 
 void hashMapRemove(MyHashMap *obj, int key) {
-  if (obj == NULL || key < 0 || key >= CAP)
+  if (obj == NULL || key < 0)
     return;
-  struct Node *current = obj->bucket[hash(key)];
+  int idx = hash(key);
+  struct Node *current = obj->bucket[idx];
   if (current == NULL)
     return;
-
   struct Node *prev = NULL;
-  do {
+  while (current != NULL) {
     if (current->key == key) {
       if (prev == NULL) {
-        // remove head node
-        obj->bucket[hash(key)] = current->next;
+        obj->bucket[idx] = current->next;
       } else {
         prev->next = current->next;
       }
@@ -80,7 +62,7 @@ void hashMapRemove(MyHashMap *obj, int key) {
     }
     prev = current;
     current = current->next;
-  } while (current != NULL);
+  }
 }
 
 void hashMapFree(MyHashMap *obj) {

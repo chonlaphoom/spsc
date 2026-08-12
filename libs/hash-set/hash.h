@@ -13,11 +13,8 @@ typedef struct {
   struct Node *bucket[CAP];
 } MyHashSet;
 
-extern MyHashSet *hashSetCreate();
+extern MyHashSet *hashSetCreate(void);
 extern void hashSetAdd(MyHashSet *obj, int key);
 extern void hashSetRemove(MyHashSet *obj, int key);
 extern bool hashSetContains(MyHashSet *obj, int key);
 extern void hashSetFree(MyHashSet *obj);
-
-static int hash(int key);
-static void freeNode(struct Node *node);
