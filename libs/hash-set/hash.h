@@ -1,15 +1,23 @@
 #include <stdbool.h>
 
-#define MAX_KEY 1000000
-#define EMPTY -1
+// load factor = size / capacity
+#define CAP 1333357
+#define EMPTY NULL
+
+struct Node {
+  int key;
+  struct Node *next;
+};
 
 typedef struct {
-  int keys[MAX_KEY];
+  struct Node *bucket[CAP];
 } MyHashSet;
 
 extern MyHashSet *hashSetCreate();
-
 extern void hashSetAdd(MyHashSet *obj, int key);
 extern void hashSetRemove(MyHashSet *obj, int key);
 extern bool hashSetContains(MyHashSet *obj, int key);
 extern void hashSetFree(MyHashSet *obj);
+
+static int hash(int key);
+static void freeNode(struct Node *node);
