@@ -1,6 +1,9 @@
 #include "intStack.h"
 #include <stdlib.h>
 
+/*
+ * LIFO stack implementation using dynamic array.
+ */
 extern void stack_init(IntStack *stack) {
   if (stack == NULL) {
     return;

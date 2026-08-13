@@ -1,6 +1,7 @@
 
 #define CAP 1047293
 
+// use linked list
 struct Node {
   int key;
   int value;

@@ -4,6 +4,7 @@
 #define CAP 1333357
 #define EMPTY NULL
 
+// use linked list
 struct Node {
   int key;
   struct Node *next;
