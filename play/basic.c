@@ -3,7 +3,8 @@
 #include <unistd.h>
 #define BUFFER_SIZE 1024 * 4
 
-int main(void) {
+int 
+main(void) {
   long n;
   char buffer[BUFFER_SIZE];
 

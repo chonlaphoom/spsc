@@ -3,7 +3,8 @@
 #include <string.h>
 #include <unistd.h>
 
-int main(void) {
+int 
+main(void) {
   char buf[1024];
   pid_t child_pid;
   int status;
