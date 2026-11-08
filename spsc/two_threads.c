@@ -32,7 +32,8 @@ static void *consumer(void *arg) {
 }
 
 int main(void) {
-  Buffer *buffer = initBuffer(1024);
+  const size_t bufferSize = 1024;
+  Buffer *buffer = initBuffer(bufferSize);
   if (!buffer) {
     fprintf(stderr, "initBuffer failed\n");
     return 1;
